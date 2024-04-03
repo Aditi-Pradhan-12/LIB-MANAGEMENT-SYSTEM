@@ -1,0 +1,28 @@
+{
+    "books": [
+        {
+            "id": "1",
+            "name": "The Hobbit",
+            "author": "J.R.R Tolkien",
+            "genre": "Fantasy",
+            "price": "$12.99",
+            "publisher": "Houghton Mifflin"
+        },
+        {
+            "id": "2",
+            "name": "The land before time",
+            "author": "Alan Moore",
+            "genre": "Fantasy",
+            "price": "$12.99",
+            "publisher": "Houghton Mifflin"
+        },
+        {
+            "id": "3",
+            "name": "Wings of Fire",
+            "author": "Dr. A.P.J Abdul Kalam",
+            "genre": "autobiography",
+            "price": "$12.99",
+            "publisher": "Houghton Mifflin"
+        }
+    ]
+}

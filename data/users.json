@@ -1,0 +1,41 @@
+{
+    "users": [
+        {
+            "id": "1",
+            "name": "John",
+            "email": "john123@gmail.com",
+            "issuedbook": "3",
+            "issueddate": "04/02/22",
+            "returnbook": "05/03/22",
+            "subscriptiontype": "premium",
+            "subscriptiondate": "01/02/22"
+        },
+        {        
+            "id": "2",
+            "name": "selena",
+            "email": "selena12@gmail.com",
+            "issuedbook": "1",
+            "issueddate": "06/03/22",
+            "returnbook": "07/04/22",
+            "subscriptiontype": "basic",
+            "subscriptiondate": "05/03/22"
+        },
+        {
+            "id": "3",
+            "name": "veronika",
+            "email": "vero23@gmail.com",
+            "issuedbook": "4",
+            "issueddate": "02/01/22",
+            "returnbook": "03/02/22",
+            "subscriptiontype": "premium",
+            "subscriptiondate": "02/01/22"
+        },
+        {
+            "id": "4",
+            "name": "ahaan",
+            "email": "ahaan10@gmail.com",
+            "subscriptiontype": "premium",
+           "subscriptiondate": "04/04/22"
+        }
+    ]
+}
