@@ -1,33 +1,12 @@
+/*importing express*/
 const express = require("express");
-/*importing users to get the users info*/
-const {users} = require("./data/users.json")
 
-/*IMPORTING THE USERS.JS and BOOKS.JS ROUTES*/
-const userRouter = require("./routes/users.js");
-const booksRouter = require("./routes/books.js");
+/*importing the user data that is in data folder*/
+const {users} = require("../data/users.json");
 
-/*application name*/
-const app = express();
+const router = express.Router();
 
-/*initialise port*/
-const PORT = 8081
-
-/*application will be using data in JSON only*/
-app.use(express.json());
-
-/*simple API*/
-app.get('/', (req,res)=>{
-    res.status(200).json({
-        message: "server is up"
-    })
-})
-
-/*if we get any other API other than the simple one then we'll redirect it to the users route*/
-app.use("/users", userRouter);
-/*the same goes for books*/
-app.use("/books", booksRouter)
-/*we'll get an error as we don't have anything yet in our books and users router*/
-
+/*users API*/
 /*users API info format
     * route: /users
     * method: GET
@@ -37,13 +16,13 @@ app.use("/books", booksRouter)
 */
 
 /*users API*/
-app.get('/users',(req,res)=>{
-    /*logic for application*/
+/*router.get('/users',(req,res)=>{
+    /*logic for application
     res.status(200).json({
         success: true,
         data: users
     })
-})
+})*/
 
 /*GET users by their IDs API info format
     * route: /users/:id
@@ -52,8 +31,7 @@ app.get('/users',(req,res)=>{
     * access: public
     *parameter: id
 */
-
-app.get('/users/:id',(req,res)=>{
+router.get('/:id',(req,res)=>{
     /*logic for application*/
     const {id} = req.params;
     /*check if the id is present or not*/
@@ -73,11 +51,11 @@ app.get('/users/:id',(req,res)=>{
 })
 
 /*API to handle the generalised URL*/
-app.get('*', (req,res)=>{
+/*app.get('*', (req,res)=>{
     res.status(200).json({
         message: "this route doesn't exists"
     })
-})
+})*/
 
 /*GET users by their IDs API info format
     ADD A NEW USER
@@ -86,8 +64,7 @@ app.get('*', (req,res)=>{
     * description: create a new user
     * access: public
 */
-
-app.post('/users',(req,res)=>{
+router.post('/',(req,res)=>{
     const {id,name,surname,email,subscriptiontype,subscriptiondate} = req.body;
     /*check if the id is present or not*/
     const user = users.find((each)=>each.id === id);
@@ -117,7 +94,7 @@ app.post('/users',(req,res)=>{
     * access: public
     * parameter: id
 */
-app.put('/users/:id',(req,res)=>{
+router.put('/:id',(req,res)=>{
     const {id} = req.params;
     const {data} = req.body;
     /*check if the id is present or not*/
@@ -152,8 +129,7 @@ app.put('/users/:id',(req,res)=>{
     * access: public
     * parameter: id
 */
-
-app.delete('/users/:id',(req,res)=>{
+router.delete('/:id',(req,res)=>{
     /*const [id,name,surname,email,subscriptiontype,subscriptiondate] = req.body;*/
     const {id} = req.params;
     /*const [data] = req.body;*/
@@ -167,7 +143,7 @@ app.delete('/users/:id',(req,res)=>{
         })
     }
     /*if user is found, then use the splice operator, for which we need to find the index of the user*/
-    const index = users.index(user);
+    const index = users.indexOf(user);
     users.splice(index, 1);
     /*deletion response*/
     return res.status(200).json({
@@ -176,7 +152,77 @@ app.delete('/users/:id',(req,res)=>{
     })
 })
 
-/*server should listen us on port 8081*/
-app.listen(PORT, ()=>{
-    console.log(`server is up and running on port ${PORT}`);
+/*DELETE users by their IDs API info format:
+    GETTING THE SUBSCRIPTION USER DETAILS
+    * route: /users/subscription-details/:id
+    * method: GET
+    * description: get all subscription details
+    * access: public
+    * parameter: id
+*/
+router.get('/subscription-details/:id',(req,res)=>{
+    const {id} = req.params;
+    /*const [data] = req.body;*/
+    /*check if the id is present or not*/
+    const user = users.find((each)=>each.id === id);
+    /*if that user != id, then*/
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            message: "user doesn't exists"
+        })
+    }
+    /*if user is found, then get their subscription details*/
+    const getdateindays = (data = "")=>{
+        let date;
+        /*if no parameter found then print the current date*/
+        if(data === ""){
+            /*print current date*/
+            date = new date();
+        }
+        else {
+            /*getting the defined/demanded*/
+            date = new date(data);
+        }
+        let days = Math.floor(date / (1000*60*60*24))
+        /*this means => 1000=milliseconds, 60=seconds, 60=minutes, 24=hours*/
+        return days
+    };
+    const subscriptiontype = (data) =>{
+        if(user.subscriptiontype === "Basic"){
+            data = date + 90;                   /*since the basic subscription is for 90 days*/
+        }else if(user.subscriptiontype === "Standard"){
+            data = date + 180;                  /*since the standard subscription is for 180 days*/
+        }else if(user.subscriptiontype === "Premium"){
+            data = date + 365;                  /*since the premium subscription is for 365 days*/
+        }
+        return data;
+    };
+    /*subscription calculation expiration logic*/
+    /*calculation of fine*/
+    let returnDate = getdateindays(user.returnDate);
+    let currentdate = getdateindays();
+    let subscriptiondate = getdateindays(user.subscriptiondate);
+    let subscriptionexpiration = subscriptiontype(subscriptiondate);
+
+    /*calling an object to get the required data*/
+    const data = {
+        ...user,
+        subscriptionexpired: subscriptionexpiration < currentdate,
+        /*if the 1st condition subscriptionexpiration <= currentdate holds true
+        then it will RETURN 0, else, we will calculate the subscriptionexpiration - currentdate
+        in order to get the number of days left fot expiration*/
+        daysleftforexpiration: subscriptionexpiration <= currentdate ? 0: subscriptionexpiration - currentdate,
+        /*if the subscriptionexpiration <= currentdate the get the penalty of INR200, 
+        i.e. Rs100 fir retrun date and Rs100 for subscriptiondate,
+        if subscription not expired then get the Rs100 in fine,
+        if neither is satisfied, then get Rs0 fine*/
+        fine: returnDate < currentdate ? subscriptionexpiration <= currentdate ? 200 :100 : 0
+    }
+    return res.status(200).json({
+        success: true,
+        data
+    })
 })
+/*exporting the router*/
+module.exports = router;
