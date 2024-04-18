@@ -68,7 +68,7 @@ router.post('/',(req,res)=>{
     /*check if the id is present or not*/
     const user = users.find((each)=>each.id === id);
     /*if that user!= given id, then*/
-    if(!user){
+    if(user){
         return res.status(404).json({
             success: false,
             message: "user doesn't exists"
