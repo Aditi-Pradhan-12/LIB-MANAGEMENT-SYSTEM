@@ -3,7 +3,6 @@ const express = require("express");
 
 /*importing the user data that is in data folder*/
 const {users} = require("../data/users.json");
-
 const router = express.Router();
 
 /*users API*/
