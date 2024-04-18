@@ -1,7 +1,7 @@
 ##project containing both node and express js
 
 application name:
-## BOOK RECORD MANAGEMENT SYSTEM:
+## LIBRARY MANAGEMENT SYSTEM:
 
 This is the book record management API BACKEND apllication.
 
@@ -65,4 +65,4 @@ nodemon: dependency for devlopers only
 ## http://localhost:8081/books/issued ##
 this link is giving us the error that "book not found for thr given ID"
 It is because, it's considering this-> "issued" as "/:id". So, it's juming onto the negative response.
-we can overcome this issue by mentioning-> "/issued/by-user"
+we can overcome this issue by mentioning-> "/issuedk/by-user"
