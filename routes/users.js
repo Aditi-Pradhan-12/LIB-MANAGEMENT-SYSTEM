@@ -56,7 +56,7 @@ router.get('/:id',(req,res)=>{
     })
 })*/
 
-/*GET users by their IDs API info format
+/*Create users by their IDs API info format
     ADD A NEW USER
     * route: /users
     * method: POST
@@ -85,7 +85,7 @@ router.post('/',(req,res)=>{
     })
 })
 
-/*GET users by their IDs API info format:
+/*Update users by their IDs API info format:
     UPDATE THE USER DATA
     * route: /users/:id
     * method: PUT
@@ -151,7 +151,7 @@ router.delete('/:id',(req,res)=>{
     })
 })
 
-/*DELETE users by their IDs API info format:
+/*Get subscription details of the users by their IDs API info format:
     GETTING THE SUBSCRIPTION USER DETAILS
     * route: /users/subscription-details/:id
     * method: GET
